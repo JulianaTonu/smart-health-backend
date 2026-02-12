@@ -33,6 +33,25 @@ model Admin {
   @@map("admins")
 }
 
+model Doctor {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  profilePhoto String?
+  contact String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  gender Gender
+  appointmentFee Int
+  qualification String 
+  currentWorkingPlace String
+  designation String
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+@@map("doctors")
+}
 
 enum UserRole {
   PATIENT
