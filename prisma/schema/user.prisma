@@ -55,8 +55,9 @@ model Doctor {
 model Patient {
   id             String @id @default(uuid())
   email          String @unique
+  name           String
   profilePhoto   String?
-  contact        String
+  contact        String?
   address        String
   isDeleted      Boolean @default(false)
   createdAt      DateTime @default(now())
