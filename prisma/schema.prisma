@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id Int @id @default(uuid())
   email String @unique
   password String
@@ -39,8 +39,6 @@ model Doctor {
   email String @unique
   profilePhoto String?
   contact String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   gender Gender
   appointmentFee Int
   qualification String 
@@ -52,6 +50,21 @@ model Doctor {
 
 @@map("doctors")
 }
+
+model Patient {
+  id String @id @default(uuid())
+  email String @unique
+  profilePhoto String?
+  contact String
+  address String
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("patients")
+}
+
+
 
 enum UserRole {
   PATIENT
