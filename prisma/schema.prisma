@@ -9,6 +9,31 @@ datasource db {
 }
 
 model user {
-  id Int @id @default(autoincrement())
-  name String
+  id Int @id @default(uuid())
+  email String @unique
+  password String
+  role UserRole @default(PATIENT)
+  needPasswordChange Boolean @default(true)
+  status UserStatus @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
