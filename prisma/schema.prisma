@@ -20,6 +20,19 @@ model user {
 }
 
 
+model Admin {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  profilePhoto String?
+  contact String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
 
 enum UserRole {
   PATIENT
