@@ -4,21 +4,22 @@ import { prisma } from "../../shared/prisma";
 import { fileUploader } from "../../helper/fileUploader";
 import { Request } from "express";
 
-const createPatient = async (req:Request) => {
+const createPatient = async (req: Request) => {
 
-if(req.file){
-  const uploadResult = await fileUploader.uploadToCloudinary(req.file)
-  console.log("uploadResult", uploadResult);
-  req.body.patient.profilePhoto = uploadResult?.secure_url
-}
+  if (req.file) {
+    const uploadResult = await fileUploader.uploadToCloudinary(req.file)
+    console.log("uploadResult", uploadResult);
+    req.body.patient.profilePhoto = uploadResult?.secure_url
+  }
 
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const email = req.body.patient.email.toLowerCase().trim();
 
   const result = await prisma.$transaction(async (tx) => {
     // 1. Create User
     await tx.user.create({
       data: {
-        email: req.body.patient.email,
+        email,
         password: hashedPassword,
         role: "PATIENT"
       }
@@ -26,17 +27,20 @@ if(req.file){
 
     // 2️. Create Patient
     const patient = await tx.patient.create({
-      data: req.body.patient
+      data:{
+        ...req.body.patient,
+        email
+      } 
     });
 
-    return patient;  
+    return patient;
   });
 
-  return result; 
+  return result;
 };
 
 
 
 export const UserService = {
-    createPatient
+  createPatient
 }
