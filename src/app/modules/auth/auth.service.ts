@@ -4,17 +4,17 @@ import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import { jwtHelper } from "../../helper/jwtHelper";
 
-const login = async(payload: { email: string; password: string }) => {
-console.log("Login payload:", payload);
+const login = async (payload: { email: string; password: string }) => {
+  console.log("Login payload:", payload);
 
   const user = await prisma.user.findFirst({
     where: {
-    email: payload.email.toLowerCase().trim(),
-    status: UserStatus.ACTIVE
-    
+      email: payload.email.toLowerCase().trim(),
+      status: UserStatus.ACTIVE
+
     }
   });
-console.log("User from DB:", user);
+  console.log("User from DB:", user);
 
   if (!user) {
     throw new Error("User not found or inactive");
@@ -27,15 +27,17 @@ console.log("User from DB:", user);
   }
 
   const accessToken = jwtHelper.generateToken(
-    { email: user.email, role: user.role },"abcd","1h"
+    { email: user.email, role: user.role }, "abcd", "1h"
   );
 
   const refreshToken = jwtHelper.generateToken(
-    { email: user.email, role: user.role },"abcd","90d"
+    { email: user.email, role: user.role }, "abcdefg", "90d"
   );
 
   return {
-    accessToken,refreshToken,
+    accessToken,
+    refreshToken,
+    needPasswordChange: user.needPasswordChange,
     user: {
       email: user.email,
       role: user.role
