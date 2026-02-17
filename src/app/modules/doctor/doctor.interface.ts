@@ -8,5 +8,5 @@ export type createDoctorInput = {
   qualification: string;
   currentWorkingPlace: string;
   designation: string;
-  profilePhoto?: string;
+//   profilePhoto?: string;
 };

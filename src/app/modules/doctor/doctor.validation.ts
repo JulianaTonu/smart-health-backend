@@ -13,6 +13,6 @@ export const createDoctorValidationSchema = z.object({
         qualification: z.string(),
         currentWorkingPlace: z.string(),
         designation: z.string(),
-        profilePhoto: z.string().optional(),
+        // profilePhoto: z.string().optional(),
     }),
 })
