@@ -3,6 +3,9 @@ import { createPatientInput } from "./user.interface";
 import { prisma } from "../../shared/prisma";
 import { fileUploader } from "../../helper/fileUploader";
 import { Request } from "express";
+import { paginationHelper } from "../../helper/paginationHelper";
+import { Prisma } from "@prisma/client";
+import { userSearchableFields } from "./user.constant";
 
 const createPatient = async (req: Request) => {
 
@@ -27,10 +30,10 @@ const createPatient = async (req: Request) => {
 
     // 2️. Create Patient
     const patient = await tx.patient.create({
-      data:{
+      data: {
         ...req.body.patient,
         email
-      } 
+      }
     });
 
     return patient;
@@ -41,12 +44,47 @@ const createPatient = async (req: Request) => {
 
 
 //getAll USers
-const getAllFromDB = async({page, limit}: {page:number, limit:number})=>{
-  const skip =(page-1) * limit;
-  console.log(skip, limit)
+const getAllFromDB = async (params: any, options: any) => {
+  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(options)
+
+  const { searchTerm, ...filterData } = params;
+
+  const andConditions: Prisma.UserWhereInput[] = [];
+  if (searchTerm) {
+    andConditions.push({
+      OR: userSearchableFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: "insensitive"
+        }
+      }))
+    })
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filterData).map(key => (
+        {
+          [key]: {
+            equals: (filterData as any)[key]
+          }
+        }
+      ))
+    })
+  }
+
+  console.log("andConditions", andConditions)
   const result = await prisma.user.findMany({
     skip,
-    take: limit
+    take: limit,
+
+    where: {
+      AND: andConditions
+
+    },
+    orderBy: {
+      [sortBy]: sortOrder
+    }
   });
   return result;
 }
