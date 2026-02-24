@@ -15,6 +15,6 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
-export const ServiceController = {
+export const ScheduleController = {
     insertIntoDB
 }
