@@ -16,7 +16,7 @@ const insertIntoDB = async (payload: any) => {
         const startDateTime = new Date(
             addMinutes(
                 addHours(
-                    `${format(currentDate, "yyyy-mm-dd")}`,
+                    `${format(currentDate, "yyyy-MM-dd")}`,
                     Number(startTime.split(":")[0])  //11:00
                 ),
                 Number(startTime.split(":")[1])
@@ -28,7 +28,7 @@ const insertIntoDB = async (payload: any) => {
         const endDateTime = new Date(
             addMinutes(
                 addHours(
-                    `${format(lastDate, "yyyy-mm-dd")}`,
+                    `${format(lastDate, "yyyy-MM-dd")}`,
                     Number(endTime.split(":")[0])
                 ),
                 Number(endTime.split(":")[1])
@@ -63,6 +63,12 @@ const insertIntoDB = async (payload: any) => {
     return schedules
 }
 
+
+const schedulesForDoctor = async()=>{
+
+}
+
+
 export const ScheduleService = {
-    insertIntoDB
+    insertIntoDB,schedulesForDoctor
 }

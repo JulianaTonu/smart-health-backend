@@ -15,6 +15,18 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
+
+const schedulesForDoctor = catchAsync(async(req:Request, res: Response)=>{
+    const result = await ScheduleService.schedulesForDoctor();
+
+
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: "Schedule Fetched Successfully",
+        data: result
+    })
+}) 
 export const ScheduleController = {
-    insertIntoDB
+    insertIntoDB,schedulesForDoctor
 }
